@@ -20,11 +20,9 @@ Dapatkan token bot dari @BotFather dan catat ID Telegram Anda (gunakan /id di bo
 Edit config.json:
 
 json
-{
   "token": "TOKEN_ID",
   "owner_id": OWNER_ID,
   "admin_file": "admin.json"
-}
 
 Jalankan bot:
 
