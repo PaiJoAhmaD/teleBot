@@ -1,0 +1,102 @@
+#===istalismanplugin===
+# -*- coding: utf-8 -*-
+
+import re
+import string
+import subprocess
+import sys
+import time
+
+# ------------------------------------------------------------
+def handler_python_eval(mtype, source, parameters):
+    bot = handler_python_eval.bot
+    try:
+        result = str(eval(parameters, {}))
+    except Exception as e:
+        result = f'{type(e).__name__} - {e}'
+    bot.reply(mtype, source, result)
+
+
+def handler_python_exec(mtype, source, parameters):
+    bot = handler_python_exec.bot
+    if '\n' in parameters and not parameters.endswith('\n'):
+        parameters += '\n'
+    try:
+        exec(parameters, globals())
+    except Exception as e:
+        bot.reply(mtype, source, f'{type(e).__name__} - {e}')
+
+
+def handler_python_sh(mtype, source, parameters):
+    bot = handler_python_sh.bot
+    output = ''
+    try:
+        if sys.platform == 'win32':
+            proc = subprocess.run(parameters, shell=True, capture_output=True, text=True)
+            output = proc.stdout or proc.stderr
+        else:
+            proc = subprocess.run(['sh', '-c', parameters], capture_output=True, text=True)
+            output = proc.stdout + proc.stderr
+    except Exception as e:
+        output = f'{type(e).__name__} - {e}'
+    bot.reply(mtype, source, output.strip() or '(no output)')
+
+
+def handler_python_calc(mtype, source, parameters):
+    bot = handler_python_calc.bot
+    parameters = parameters.strip()
+    allowed_chars = string.digits + '+-*/^(). '
+    filtered = re.sub(f'[{re.escape(allowed_chars)}]', '', parameters).strip()
+    if filtered == '':
+        try:
+            expr = parameters.replace('^', '**')
+            result = str(eval(expr, {}))
+            time.sleep(1)
+        except Exception:
+            result = 'teach me to do it :)'
+    else:
+        result = 'you are a glitch'
+    bot.reply(mtype, source, result)
+
+
+# ------------------------------------------------------------
+def register(bot):
+    """Fungsi yang dipanggil oleh bot untuk mendaftarkan perintah."""
+    # Suntikkan bot ke handler
+    handler_python_eval.bot = bot
+    handler_python_exec.bot = bot
+    handler_python_sh.bot = bot
+    handler_python_calc.bot = bot
+
+    bot.register_command(
+        handler_python_eval,
+        'eval', access=100,
+        desc='Evaluate a Python expression and show the result.',
+        syntax='eval <expression>',
+        examples=['eval 1+1'],
+        category=['superadmin', 'all']
+    )
+    bot.register_command(
+        handler_python_exec,
+        'exec', access=100,
+        desc='Execute Python code (dangerous).',
+        syntax='exec <code>',
+        examples=['exec pass'],
+        category=['superadmin', 'all']
+    )
+    bot.register_command(
+        handler_python_sh,
+        'sh', access=100,
+        desc='Execute a shell command.',
+        syntax='sh <command>',
+        examples=['sh ls', 'sh dir'],
+        category=['superadmin', 'all']
+    )
+    bot.register_command(
+        handler_python_calc,
+        'calc', access=10,
+        desc='Simple calculator (only digits and + - * / ^ .).',
+        syntax='calc <expression>',
+        examples=['calc 1+2', 'calc 2^10'],
+        category=['info', 'all']
+    )

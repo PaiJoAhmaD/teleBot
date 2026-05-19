@@ -1,0 +1,5 @@
+{
+  "token": "TOKEN_ID",
+  "owner_id": OWNER_ID,
+  "admin_file": "admin.json"
+}
