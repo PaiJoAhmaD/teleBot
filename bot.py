@@ -25,6 +25,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+logging.getLogger("httpx").setLevel(logging.WARNING)
+
 # ==================== PEMUAT PLUGIN ====================
 def load_plugins(app: Application):
     for loader, module_name, is_pkg in pkgutil.iter_modules(plugins.__path__):
