@@ -13,11 +13,14 @@ Install Python 3.14+ (pastikan python tersedia di PATH).
 Install library yang dibutuhkan:
 
 bash
+
 pip install python-telegram-bot
 
 Dapatkan token bot dari @BotFather dan catat ID Telegram Anda (gunakan /id di bot setelah dijalankan pertama kali).
 
-Edit config.json:
+Edit 
+
+config.json:
 
 json
   "token": "TOKEN_ID",
@@ -27,6 +30,7 @@ json
 Jalankan bot:
 
 bash
+
 python bot.py
 
 Bot akan memuat semua plugin dan mulai polling.
