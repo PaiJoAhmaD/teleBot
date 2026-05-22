@@ -11,7 +11,7 @@ from telegram.ext import Application, CommandHandler
 import json
 
 # ==================== KONFIGURASI ====================
-#TOKEN = "8645637696:AAGDKRZx7iYrb0PXFWYXsqNJfJwo1g1M3Hg"
+
 # Baca konfigurasi
 with open("config.json", "r") as f:
     config = json.load(f)
